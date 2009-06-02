@@ -1,0 +1,24 @@
+[
+    {
+        "model": "auth.User",
+        "pk": "1",
+        "fields": {
+        	"username" : "Tester",
+        	"password" : "sha1$aaa$b27189d65f3a148a8186753f3f30774182d923d5"
+        }
+    },
+    {
+	    "model": "auth.User",
+	    "pk": 2,
+	    "fields": {
+	      "password" : "sha1$aaa$b27189d65f3a148a8186753f3f30774182d923d5",
+	      "username": "superuser",
+	      "first_name": "Esus",
+	      "last_name": "Master",
+	      "is_staff": 1,
+	      "is_active": 1,
+	      "is_superuser": 1
+	    }
+	}
+
+]

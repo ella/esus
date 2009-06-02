@@ -47,7 +47,10 @@ INSTALLED_APPS = (
     'django.contrib.redirects',
     'django.contrib.admin',
 
+    'helper_test_app',
+
     'south',
+    'threadedcomments',
 
     'esus.phorum',
 

@@ -37,4 +37,3 @@ setup(
         'setuptools>=0.6b1',
     ],
 )
-
