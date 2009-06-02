@@ -37,13 +37,14 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 INSTALLED_APPS = (
-    'djangobaselibrary.sample',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.redirects',
     'django.contrib.admin',
+
+    'esus.phorum',
 )
 
 DEFAULT_PAGE_ID = 1

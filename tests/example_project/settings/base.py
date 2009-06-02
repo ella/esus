@@ -4,8 +4,6 @@ from os.path import dirname, join
 
 import django
 
-import djangobaselibrary
-
 import example_project
 
 
@@ -47,10 +45,12 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.redirects',
-
-#    'south',
-
     'django.contrib.admin',
+
+    'south',
+
+    'esus.phorum',
+
 )
 
 VERSION = 1
