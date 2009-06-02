@@ -13,7 +13,8 @@ class AdminTestCase(SeleniumTestCase):
         super(AdminTestCase, self).__init__()
         self.elements = {
             'navigation' : {
-                'logout' : '//a[@href="%slogout/"]' % self.ADMIN_URI
+                'logout' : '//a[@href="%slogout/"]' % self.ADMIN_URI,
+                'home' : '//div[@class="breadcrumbs"]/a[position()=1]',
             },
             'listing' : {
                 'save' : '//input[@name="_save"]',
@@ -37,6 +38,7 @@ class AdminTestCase(SeleniumTestCase):
 
     def setUp(self):
         super(AdminTestCase, self).setUp()
+        self.selenium.window_maximize()
         self.login_superuser()
 
     def login_superuser(self):
