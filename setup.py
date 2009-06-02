@@ -4,7 +4,7 @@ import esus
 setup(
     name = 'esus',
     version = esus.__versionstr__,
-    description = 'Esus', # TODO: REPLACE
+    description = 'Esus',
     long_description = '\n'.join((
         'Esus',
         '',
@@ -12,8 +12,8 @@ setup(
     )),
     author = 'Lukáš Linhart',
     author_email='bugs@almad.net',
-    license = 'BSD', # TODO: REPLACE
-    url='http://git.netcentrum.cz/projects/django/GIT/esus/', # TODO: REPLACE
+    license = 'BSD',
+    url='http://git.netcentrum.cz/projects/django/GIT/esus/',
 
     packages = find_packages(
         where = '.',
@@ -22,9 +22,8 @@ setup(
 
     include_package_data = True,
 
-    # TODO: REPLACE
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
