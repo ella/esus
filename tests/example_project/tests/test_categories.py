@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from example_project.tests.helpers import EsusTestCase
 from example_project.tests.fixtures import create_zena_categories
 
@@ -21,7 +22,4 @@ class TestCategories(EsusTestCase):
         for category in categories:
             self.assert_equals(True, category.name in page_categories)
 
-    def test_simple_discussion_creation(self):
-        s = self.selenium
-        s.click(self.elements['navigation']['categories'])
 

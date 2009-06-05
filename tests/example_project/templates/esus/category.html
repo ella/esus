@@ -1,0 +1,13 @@
+{% extends "main.html" %}
+
+{% block primary_col %}
+    <h1>Category {{ category.name }}</h1>
+    <p><a href="{% url esus-phorum-table-create category=category.slug %}" id="link_table_add">Create a new table</a></p>
+	<div id="tables">
+        <ul>
+        {% for table in tables %}
+            <li><a href="{% url esus-phorum-table table=table.slug %}">{{ table.name }}</a></li>
+        {% endfor %}
+        </ul>
+	</div>
+{% endblock %}

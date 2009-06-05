@@ -18,6 +18,7 @@ class EsusTestCase(SeleniumTestCase):
                 'login' : 'link-login',
                 'logout' : 'link-logout',
                 'categories' : 'link-categories',
+                'submit_form' : 'form-submit',
             },
             'pages' : {
                 'login' : {
@@ -29,10 +30,14 @@ class EsusTestCase(SeleniumTestCase):
                 },
                 'category' : {
                     "categories_list" : "//div[@id='categories']/ul/li",
+                    "table_add" : "//a[@id='link_table_add']",
                 },
                 'profile' : {
                     'username' : "//h1"
-                }
+                },
+                'table' : {
+                    'name' : "//h1"
+                },
             }
         }
 

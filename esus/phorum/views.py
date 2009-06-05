@@ -1,10 +1,12 @@
 from django.core.urlresolvers import reverse
-#from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 
 from django.views.generic.simple import direct_to_template
 
-from esus.phorum.models import Category
+from esus.phorum.models import Category, Table
+from django.template.defaultfilters import slugify
+from esus.phorum.forms import TableCreationForm, ArticleCreationForm
 
 def root(request):
     """
@@ -15,19 +17,53 @@ def root(request):
 
 def categories(request):
     categories = Category.objects.all().order_by('name')
-#    raise ValueError(request.user.is_authenticated())
+
     return direct_to_template(request, "esus/categories.html", {
         'categories' : categories,
     })
 
-def category_list(request, slug=None):
-    """
-    """
-    pass
-#    if name:
-#        category = get_object_or_404(Category, slug=slug)
-#    else:
-#        category = Category.objecs.all().order_by('name')
-#
-#    return direct_to_template(request, "esus/category", {
-#    })
+def category(request, category):
+    category = get_object_or_404(Category, slug=category)
+    tables = category.table_set.order_by('-name')
+
+    return direct_to_template(request, "esus/category.html", {
+        "category" : category,
+        "tables" : tables,
+    })
+
+def table_create(request, category):
+    category = get_object_or_404(Category, slug=category)
+    if request.method == "POST":
+        form = TableCreationForm(request.POST)
+        if form.is_valid():
+            table = Table.objects.create(
+                category = category,
+                name = form.cleaned_data['name'],
+                slug = slugify(form.cleaned_data['name']),
+                description = form.cleaned_data['description'],
+            )
+            return HttpResponseRedirect(reverse("esus-phorum-table", kwargs={
+                "category" : category.slug,
+                "table" : table.slug,
+            }))
+    else:
+        form = TableCreationForm()
+    return direct_to_template(request, "esus/table_create.html", {
+        "category" : category,
+        "form" : form,
+    })
+
+def table(request, category, table):
+    category = get_object_or_404(Category, slug=category)
+    table = get_object_or_404(Table, slug=table)
+
+    form = ArticleCreationForm()
+
+    return direct_to_template(request, "esus/table.html", {
+        "category" : category,
+        "table" : table,
+        "form" : form,
+    })
+
+
+

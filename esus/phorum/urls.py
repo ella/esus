@@ -2,7 +2,9 @@ from django.conf.urls.defaults import patterns, url
 
 urlpatterns = patterns('esus.phorum.views',
     url(r'^categories/$', 'categories', name="esus-phorum-categories"),
-    url(r'^category/(?P<slug>\w*)$', 'category_list', name="esus-phorum-category-list"),
+    url(r'^category/(?P<category>[\w-]+)$', 'category', name="esus-phorum-category"),
+    url(r'^category/(?P<category>[\w-]+)/tables/create/$', 'table_create', name="esus-phorum-table-create"),
+    url(r'^category/(?P<category>[\w-]+)/table/(?P<table>[\w-]+)/$', 'table', name="esus-phorum-table"),
     url(r'^$', 'root', name="esus-phorum-root"),
 )
 
