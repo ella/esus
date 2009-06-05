@@ -1,0 +1,12 @@
+{% extends "main.html" %}
+
+{% block primary_col %}
+    Boo ya
+	<div id="categories">
+        <ul>
+        {% for category in categories %}
+            <li><a href="">{{ category.name }}</a></li>
+        {% endfor %}
+        </ul>
+	</div>
+{% endblock %}

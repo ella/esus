@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cs" lang="cs">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>{% if object.title %}{{ object.title }} &ndash; {% endif %}{% if not object.title %}{% if category.description %}{{ category.description|striptags }}{% endif %}{% if not category.description %}{{ category.title }}{% endif %} &ndash; {% endif %}stdout.cz</title>
+		<link rel="shortcut icon" type="image/x-icon" href="{{ MEDIA_URL }}stdout/favicon.ico" />
+	</head>
+	<body>
+		<div id="all">
+			<div id="content"{% block content_class %}{% endblock %}>
+				{% block primary_col %}{% endblock %}
+			</div>
+
+			<div class="cl"></div>
+
+            <div id="menu">
+                <ul>
+                <li><a href="{% url esus-phorum-categories %}" id="link-categories">Categories</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url user-profile %}" id="link-profile">My Profile</a></li>
+                    <li><a href="{% url user-logout %}" id="link-logout">Log out</a></li>
+                {% else %}
+                    <li><a href="{% url user-login %}" id="link-login">Log in</a></li>
+                    <li><a href="{% url user-registration %}" id="link-register">Register</a></li>
+                {% endif %}
+                </ul>
+            </div>
+			<div id="footer">
+				<p>© 2009 <a href="http://www.centrumholdings.com/">Centrum Holdings</a></p>
+			</div>
+		</div>
+	</body>
+</html>

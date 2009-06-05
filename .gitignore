@@ -2,3 +2,5 @@
 .*.sw?
 *~
 nbproject/
+tests/example_project/settings/local.py
+tests/unit_project/settings/local.py

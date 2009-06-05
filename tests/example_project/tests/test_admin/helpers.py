@@ -2,7 +2,7 @@ from djangosanetesting import SeleniumTestCase
 from django.utils.translation import ugettext_lazy as _
 
 class AdminTestCase(SeleniumTestCase):
-    fixtures = ['admin_user']
+    fixtures = ['test_users']
 
     SUPERUSER_USERNAME = u"superuser"
     SUPERUSER_PASSWORD = u"xxx"
