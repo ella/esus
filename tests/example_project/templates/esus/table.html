@@ -2,4 +2,25 @@
 
 {% block primary_col %}
     <h1>{{ table.name }}</h1>
+    <form id="comment-add" method="post">
+        <script type="text/javascript">
+        <!--
+        $(document).ready(function() {
+            $('#id_text').markItUp(CTTASettings);
+        });
+        -->
+        </script>
+        {{ form.as_p }}
+        <input type="submit" name="Odeslat" />
+    </form>
+
+    <div id="comments">
+    {% for comment in comments %}
+        <div class="comment">
+            {% autoescape off %}
+                {{ comment.text }}
+            {% endautoescape %}
+        </div>
+    {% endfor %}
+    </div>
 {% endblock %}

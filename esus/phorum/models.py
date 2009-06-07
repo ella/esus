@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -41,3 +42,11 @@ class Table(models.Model):
         return self.name
 
 
+class Comment(models.Model):
+    """
+    Comment from author inside table of any type.
+    """
+    author = models.ForeignKey(User)
+    table = models.ForeignKey(Table)
+    text = models.TextField()
+    date = models.DateTimeField(auto_now=True)

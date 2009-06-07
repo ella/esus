@@ -50,7 +50,7 @@ INSTALLED_APPS = (
     'helper_test_app',
 
     'south',
-    'threadedcomments',
+    'djangomarkup',
 
     'esus.phorum',
 

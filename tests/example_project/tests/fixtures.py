@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from esus.phorum.models import Category
+from esus.phorum.models import Category, Table
 
 def create_zena_categories(case, commit=True):
     # nested Czech category
@@ -49,6 +49,18 @@ def create_zena_categories(case, commit=True):
     case.category_sex = Category.objects.create(
         name = u"Sex",
         slug = u"sex",
+    )
+
+    if commit:
+        case.transaction.commit()
+
+def create_tables(case, commit=True):
+
+    case.table_disciples = Table.objects.create(
+        name = u"孔夫子得学徒",
+        slug = u"kong-fuzi-de-xuetu",
+        category = case.category_languages_chinese_confucius,
+        description = u"About disciples of Confucius",
     )
 
     if commit:

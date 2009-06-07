@@ -6,7 +6,7 @@
 	<div id="tables">
         <ul>
         {% for table in tables %}
-            <li><a href="{% url esus-phorum-table table=table.slug %}">{{ table.name }}</a></li>
+            <li><a href="{% url esus-phorum-table table=table.slug category=category.slug %}">{{ table.name }}</a></li>
         {% endfor %}
         </ul>
 	</div>

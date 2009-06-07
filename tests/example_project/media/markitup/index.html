@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>CzechTile TextArea -- markItUp! version</title>
+
+<!-- jQuery -->
+<script type="text/javascript" src="jquery.js"></script>
+<!-- markItUp! -->
+<script type="text/javascript" src="markitup/jquery.markitup.js"></script>
+
+<!-- textarea skin -->
+<link rel="stylesheet" type="text/css" href="skin/style.css" />
+<!-- toolbar skin -->
+<link rel="stylesheet" type="text/css" href="ctta.css" />
+<!-- czechtile syntax -->
+<script type="text/javascript" src="ctta.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+<!--
+$(document).ready(function() {
+	$('#ctta').markItUp(CTTASettings);
+
+    $('#switcher li').click(function() {
+            $('#ctta').markItUpRemove();                   
+            newSet = $(this).attr('class');
+            switch(newSet) {
+                case 'czechtile':
+                    $('#ctta').markItUp(CTTASettings);
+                    break;
+            }
+            return false;
+        }
+    );
+
+});
+-->
+</script>
+<h1><a href="http://www.czechtile.info">CzechTile</a> Text Area -- <a href="http://markitup.jaysalvat.com">markItUp!</a> version</h1>
+<p><code>hg clone http://hg.almad.net/ctta</code></p>
+<ul id="switcher">
+	<li class="czechtile"><a href="#">CTTA</a></li>
+	<li class="remove"><a href="#">Standard textarea</a></li>
+</ul>
+<p>
+<textarea id="ctta" cols="80" rows="20">
+= Test =
+
+Simply enjoy ;)
+</textarea>
+</p>
+</body>
+</html>

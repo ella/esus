@@ -1,0 +1,44 @@
+/* -------------------------------------------------------------------
+// markItUp!
+// By Jay Salvat - http://markitup.jaysalvat.com/
+// ------------------------------------------------------------------*/
+.ctta .h1 a {
+	background-image: url(images/h1.png); 
+}
+.ctta .h2 a {
+	background-image: url(images/h2.png); 
+}
+.ctta .h3 a {
+	background-image: url(images/h3.png); 
+}
+.ctta .h4 a {
+	background-image: url(images/h4.png); 
+}
+.ctta .h5 a {
+	background-image: url(images/h5.png); 
+}
+
+.ctta .italic a {
+	background-image: url(images/italic.png);
+}
+.ctta .bold a {
+	background-image: url(images/bold.png);
+}
+
+.ctta .list-bullet a {
+	background-image: url(images/list-bullet.png);
+}
+.ctta .list-numeric a {
+	background-image: url(images/list-numeric.png);
+}
+
+.ctta .url a {
+	background-image: url(images/url.png); 
+}
+.ctta .picture a {
+	background-image: url(images/picture.png);
+}
+
+.ctta .preview a {
+	background-image: url(images/preview.png);
+}

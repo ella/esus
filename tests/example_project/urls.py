@@ -17,7 +17,7 @@ urlpatterns = patterns('',
 
     (r'^admin/(.*)', admin.site.root),
 
-    (r'^static/(?P<path>.*)$', 'django.views.static.serve', { 'document_root': settings.MEDIA_ROOT, 'show_indexes': True }),
+    (r'^media/(?P<path>.*)$', 'django.views.static.serve', { 'document_root': settings.MEDIA_ROOT, 'show_indexes': True }),
 
 )
 

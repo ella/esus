@@ -31,12 +31,13 @@ class EsusTestCase(SeleniumTestCase):
                 'category' : {
                     "categories_list" : "//div[@id='categories']/ul/li",
                     "table_add" : "//a[@id='link_table_add']",
+                    "tables_list" : "//div[@id='tables']/ul/li",
                 },
                 'profile' : {
-                    'username' : "//h1"
+                    'username' : "//h1",
                 },
                 'table' : {
-                    'name' : "//h1"
+                    'name' : "//h1",
                 },
             }
         }

@@ -4,9 +4,9 @@ from django.http import HttpResponseRedirect
 
 from django.views.generic.simple import direct_to_template
 
-from esus.phorum.models import Category, Table
+from esus.phorum.models import Category, Table, Comment
 from django.template.defaultfilters import slugify
-from esus.phorum.forms import TableCreationForm, ArticleCreationForm
+from esus.phorum.forms import TableCreationForm, CommentCreationForm
 
 def root(request):
     """
@@ -57,12 +57,25 @@ def table(request, category, table):
     category = get_object_or_404(Category, slug=category)
     table = get_object_or_404(Table, slug=table)
 
-    form = ArticleCreationForm()
+    if request.method == "POST":
+        form = CommentCreationForm(request.POST)
+        if form.is_valid():
+            comment = Comment.objects.create(
+                table = table,
+                text = form.cleaned_data['text'],
+                author = request.user,
+            )
+            form = CommentCreationForm()
+    else:
+        form = CommentCreationForm()
+
+    comments = Comment.objects.filter(table=table).order_by('-date')
 
     return direct_to_template(request, "esus/table.html", {
         "category" : category,
         "table" : table,
         "form" : form,
+        "comments" : comments,
     })
 
 

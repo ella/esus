@@ -55,9 +55,9 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # disable double render in admin
 # DOUBLE_RENDER = False
 
-MEDIA_ROOT = join(dirname(example_project.__file__), 'static')
+MEDIA_ROOT = join(dirname(example_project.__file__), 'media')
 
-MEDIA_URL = '/static/'
+MEDIA_URL = '/media/'
 
 ADMIN_MEDIA_PREFIX = '/static/admin_media/'
 
