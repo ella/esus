@@ -1,6 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 
 from django.views.generic.simple import direct_to_template
 
@@ -15,6 +16,7 @@ def root(request):
     """
     return HttpResponseRedirect(reverse("esus-phorum-categories"))
 
+@login_required
 def categories(request):
     categories = Category.objects.all().order_by('name')
 
@@ -22,6 +24,7 @@ def categories(request):
         'categories' : categories,
     })
 
+@login_required
 def category(request, category):
     category = get_object_or_404(Category, slug=category)
     tables = category.table_set.order_by('-name')
@@ -31,6 +34,7 @@ def category(request, category):
         "tables" : tables,
     })
 
+@login_required
 def table_create(request, category):
     category = get_object_or_404(Category, slug=category)
     if request.method == "POST":
@@ -53,6 +57,7 @@ def table_create(request, category):
         "form" : form,
     })
 
+@login_required
 def table(request, category, table):
     category = get_object_or_404(Category, slug=category)
     table = get_object_or_404(Table, slug=table)
