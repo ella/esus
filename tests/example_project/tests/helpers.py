@@ -50,6 +50,7 @@ class EsusTestCase(SeleniumTestCase):
     def login_user(self):
         self.selenium.open(self.TEST_PROJECT_URI)
         self.selenium.click(self.elements['navigation']['login'])
+        self.selenium.wait_for_page_to_load(30000)
         self.selenium.type("id_username", self.USER_USERNAME)
         self.selenium.type("id_password", self.USER_PASSWORD)
         self.selenium.click(self.elements['pages']['login']['submit'])
