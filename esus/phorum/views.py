@@ -1,13 +1,14 @@
-from django.core.urlresolvers import reverse
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
-
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.template.defaultfilters import slugify
 from django.views.generic.simple import direct_to_template
 
 from esus.phorum.models import Category, Table, Comment
-from django.template.defaultfilters import slugify
 from esus.phorum.forms import TableCreationForm, CommentCreationForm
+from esus.phorum.access import AccessManager
 
 def root(request):
     """
@@ -62,10 +63,19 @@ def table(request, category, table):
     category = get_object_or_404(Category, slug=category)
     table = get_object_or_404(Table, slug=table)
 
+    access_manager = AccessManager()
+
     if request.method == "POST":
         form = CommentCreationForm(request.POST)
         if form.is_valid():
-            comment = Comment.objects.create(
+            # posting new message
+            if not access_manager.has_comment_create(
+                    user=request.user,
+                    category=Category,
+                    table=Table,
+                ):
+                return HttpResponseForbidden()
+            Comment.objects.create(
                 table = table,
                 text = form.cleaned_data['text'],
                 author = request.user,
@@ -81,7 +91,5 @@ def table(request, category, table):
         "table" : table,
         "form" : form,
         "comments" : comments,
+        'access' : AccessManager(user=request.user),
     })
-
-
-
