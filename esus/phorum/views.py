@@ -41,8 +41,8 @@ def table_create(request, category):
     if request.method == "POST":
         form = TableCreationForm(request.POST)
         if form.is_valid():
-            table = Table.objects.create(
-                category = category,
+            table = category.add_table(
+                owner = request.user,
                 name = form.cleaned_data['name'],
                 slug = slugify(form.cleaned_data['name']),
                 description = form.cleaned_data['description'],
@@ -63,20 +63,19 @@ def table(request, category, table):
     category = get_object_or_404(Category, slug=category)
     table = get_object_or_404(Table, slug=table)
 
-    access_manager = AccessManager()
+    access_manager = AccessManager(context={
+        "user" : request.user,
+        "table" : table,
+        "category" : category,
+    })
 
     if request.method == "POST":
         form = CommentCreationForm(request.POST)
         if form.is_valid():
             # posting new message
-            if not access_manager.has_comment_create(
-                    user=request.user,
-                    category=Category,
-                    table=Table,
-                ):
+            if not access_manager.has_comment_create():
                 return HttpResponseForbidden()
-            Comment.objects.create(
-                table = table,
+            table.add_comment(
                 text = form.cleaned_data['text'],
                 author = request.user,
             )
@@ -91,5 +90,5 @@ def table(request, category, table):
         "table" : table,
         "form" : form,
         "comments" : comments,
-        'access' : AccessManager(user=request.user),
+        'access' : access_manager,
     })

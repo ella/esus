@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.contrib.auth.models import User
 
 from esus.phorum.models import Category, Table
 
@@ -57,6 +58,7 @@ def create_zena_categories(case, commit=True):
 def create_tables(case, commit=True):
 
     case.table_disciples = Table.objects.create(
+        owner = User.objects.get(username="Tester"),
         name = u"孔夫子得学徒",
         slug = u"kong-fuzi-de-xuetu",
         category = case.category_languages_chinese_confucius,
