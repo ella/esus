@@ -15,7 +15,8 @@
     </form>
 
     <form name="control" method="post">
-    {{ comment_formset.management_form }}
+    {{ formset.management_form }}
+    <p>Group actions: <input type="submit" name="control-action" value="Delete" /></p>
     <div id="comments">
     {% for comment, comment_form in comments %}
         <div class="comment" name="comment">

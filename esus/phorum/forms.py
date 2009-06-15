@@ -82,14 +82,7 @@ class CommentCreationForm(forms.Form):
 #return ArticleForm
 
 class CommentControlForm(forms.Form):
-    action = forms.ChoiceField(
-        widget=MultipleSubmitButton(),
-        choices=(
-            ('delete', _("Delete")),
-        ),
-        required=False,
-    ),
-#    pk = forms.IntegerField(widget=forms.HiddenInput())
+    pk = forms.IntegerField(widget=forms.HiddenInput(), required=False)
 
 
 

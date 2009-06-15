@@ -68,9 +68,16 @@ This is ""Czechtile"" text.
 This is ""Czechtile"" text.
 """)
         # submit
-        s.click(u"//input[@type='submit']")
+        s.click(u"//input[@name='Odeslat']")
         s.wait_for_page_to_load(30000)
 
-        # delete
-        self.assert_equals("Important", s.get_text("//div[@id='comments']/div[@class='comment'][0]//input[@class='delete']"))
-        self.assert_equals(0, s.get_xpath_count("//div[@id='comments']/div[@class='comment']"))
+        articles_count = int(s.get_xpath_count("//div[@id='comments']/div[@class='comment']"))
+
+        # select last comment for deletion
+        #self.assert_equals("Important", s.get_text("//div[@id='comments']/div[@class='comment'][1]//input[@type='checkbox']"))
+        s.check('id_form-0-DELETE')
+        s.click(u"//input[@name='control-action']")
+        s.wait_for_page_to_load(30000)
+
+        # comment should not be present
+        self.assert_equals(articles_count-1, int(s.get_xpath_count("//div[@id='comments']/div[@class='comment']")))

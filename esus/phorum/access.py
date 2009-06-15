@@ -137,7 +137,7 @@ class EsusAccessManager(AccessInterface):
 
         table = self.context.get("table", None) or comment.table
 
-        if user is table.owner:
+        if user == table.owner:
             return True
 
         return False

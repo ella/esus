@@ -1,4 +1,3 @@
-from django.forms.util import ValidationError
 from django.http import HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -78,7 +77,8 @@ def table(request, category, table):
     if request.method == "POST":
         # TODO: Abstract this logic into something more sensible, some kind of
         # action dispatcher would be nice
-        if request.POST.has_key(_('Submit')):
+        if request.POST.has_key(u"Odeslat"):
+            
             form = CommentCreationForm(request.POST)
             if form.is_valid():
                 # posting new message
@@ -90,15 +90,25 @@ def table(request, category, table):
                 )
                 #TODO: Redirect to self avoid multiple posts
                 form = CommentCreationForm()
-        else:
+        elif request.POST.has_key(u'control-action') \
+            and request.POST[u'control-action']:
             comment_forms = formset_factory(CommentControlForm, can_delete=True)(request.POST)
             if comment_forms.is_valid():
-                pass
+                for comm_form in comment_forms.deleted_forms:
+                    comment = Comment.objects.get(pk=comm_form.cleaned_data['pk'])
+                    if not access_manager.has_comment_delete(comment=comment):
+                        return HttpResponseForbidden("Cannot delete comment")
+                    comment.delete()
+            comment_forms = None
 
     comments = Comment.objects.filter(table=table).order_by('-date')
 
     if not comment_forms:
-        comment_forms = formset_factory(CommentControlForm, extra=len(comments))()
+        comment_forms = formset_factory(CommentControlForm, can_delete=True)(
+            initial = [
+                {'pk' : comment.pk} for comment in comments
+            ]
+        )
     if not form:
         form = CommentCreationForm()
 
@@ -106,7 +116,7 @@ def table(request, category, table):
         "category" : category,
         "table" : table,
         "form" : form,
-        "comment_formset" : comment_forms,
+        "formset" : comment_forms,
         "comments" : zip(comments, comment_forms.forms),
         'access' : access_manager,
     })
