@@ -49,3 +49,28 @@ This is ""Czechtile"" text.
         s.wait_for_page_to_load(30000)
 
         self.assert_equals("Important", s.get_text("//div[@id='comments']/div[@class='comment']/h1"))
+
+
+    def test_article_deleting(self):
+        s = self.selenium
+
+        # go inside category with table
+        s.click(self.elements['navigation']['categories'])
+        s.click(self.elements['pages']['category']['categories_list']+"/a[@href='/category/kong-fuzi-de-zhexue']")
+
+        # go to first table
+        s.click(self.elements['pages']['category']['tables_list']+"[1]/a")
+
+        # add testing text
+        s.type("id_text", u"""
+= Important =
+
+This is ""Czechtile"" text.
+""")
+        # submit
+        s.click(u"//input[@type='submit']")
+        s.wait_for_page_to_load(30000)
+
+        # delete
+        self.assert_equals("Important", s.get_text("//div[@id='comments']/div[@class='comment'][0]//input[@class='delete']"))
+        self.assert_equals(0, s.get_xpath_count("//div[@id='comments']/div[@class='comment']"))

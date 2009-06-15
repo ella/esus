@@ -14,13 +14,19 @@
         <input type="submit" name="Odeslat" />
     </form>
 
+    <form name="control" method="post">
+    {{ comment_formset.management_form }}
     <div id="comments">
-    {% for comment in comments %}
-        <div class="comment">
-            {% autoescape off %}
-                {{ comment.text }}
-            {% endautoescape %}
+    {% for comment, comment_form in comments %}
+        <div class="comment" name="comment">
+            <div class="text" name="text">
+                {% autoescape off %}
+                    {{ comment.text }}
+                {% endautoescape %}
+            </div>
+            {{ comment_form }}
         </div>
     {% endfor %}
     </div>
+    </form>
 {% endblock %}

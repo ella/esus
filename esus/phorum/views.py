@@ -1,3 +1,4 @@
+from django.forms.util import ValidationError
 from django.http import HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -5,9 +6,11 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
 from django.views.generic.simple import direct_to_template
+from django.forms.formsets import formset_factory
+from django.utils.translation import ugettext_lazy as _
 
 from esus.phorum.models import Category, Table, Comment
-from esus.phorum.forms import TableCreationForm, CommentCreationForm
+from esus.phorum.forms import TableCreationForm, CommentCreationForm, CommentControlForm
 from esus.phorum.access import AccessManager
 
 def root(request):
@@ -69,26 +72,41 @@ def table(request, category, table):
         "category" : category,
     })
 
+    comment_forms = None
+    form = None
+
     if request.method == "POST":
-        form = CommentCreationForm(request.POST)
-        if form.is_valid():
-            # posting new message
-            if not access_manager.has_comment_create():
-                return HttpResponseForbidden()
-            table.add_comment(
-                text = form.cleaned_data['text'],
-                author = request.user,
-            )
-            form = CommentCreationForm()
-    else:
-        form = CommentCreationForm()
+        # TODO: Abstract this logic into something more sensible, some kind of
+        # action dispatcher would be nice
+        if request.POST.has_key(_('Submit')):
+            form = CommentCreationForm(request.POST)
+            if form.is_valid():
+                # posting new message
+                if not access_manager.has_comment_create():
+                    return HttpResponseForbidden()
+                table.add_comment(
+                    text = form.cleaned_data['text'],
+                    author = request.user,
+                )
+                #TODO: Redirect to self avoid multiple posts
+                form = CommentCreationForm()
+        else:
+            comment_forms = formset_factory(CommentControlForm, can_delete=True)(request.POST)
+            if comment_forms.is_valid():
+                pass
 
     comments = Comment.objects.filter(table=table).order_by('-date')
+
+    if not comment_forms:
+        comment_forms = formset_factory(CommentControlForm, extra=len(comments))()
+    if not form:
+        form = CommentCreationForm()
 
     return direct_to_template(request, "esus/table.html", {
         "category" : category,
         "table" : table,
         "form" : form,
-        "comments" : comments,
+        "comment_formset" : comment_forms,
+        "comments" : zip(comments, comment_forms.forms),
         'access' : access_manager,
     })
