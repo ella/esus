@@ -6,10 +6,13 @@ from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
 from django.views.generic.simple import direct_to_template
 from django.forms.formsets import formset_factory
-from django.utils.translation import ugettext_lazy as _
+#from django.utils.translation import ugettext_lazy as _
 
 from esus.phorum.models import Category, Table, Comment
-from esus.phorum.forms import TableCreationForm, CommentCreationForm, CommentControlForm
+from esus.phorum.forms import (TableCreationForm,
+    CommentCreationForm, CommentControlForm,
+    TableAccessForm,
+)
 from esus.phorum.access import AccessManager
 
 def root(request):
@@ -96,9 +99,11 @@ def table(request, category, table):
             if comment_forms.is_valid():
                 for comm_form in comment_forms.deleted_forms:
                     comment = Comment.objects.get(pk=comm_form.cleaned_data['pk'])
-                    if not access_manager.has_comment_delete(comment=comment):
-                        return HttpResponseForbidden("Cannot delete comment")
-                    comment.delete()
+                    if access_manager.has_comment_delete(comment=comment):
+                        comment.delete()
+                    else:
+                        #TODO: Display message or pass silently?
+                        pass
             comment_forms = None
 
     comments = Comment.objects.filter(table=table).order_by('-date')
@@ -118,5 +123,33 @@ def table(request, category, table):
         "form" : form,
         "formset" : comment_forms,
         "comments" : zip(comments, comment_forms.forms),
+        'access' : access_manager,
+    })
+
+@login_required
+def table_settings_access(request, category, table):
+    category = get_object_or_404(Category, slug=category)
+    table = get_object_or_404(Table, slug=table)
+
+    access_manager = AccessManager(context={
+        "user" : request.user,
+        "table" : table,
+        "category" : category,
+    })
+    if not access_manager.has_table_access_modify():
+        return HttpResponseForbidden()
+
+    form = TableAccessForm({
+        'is_public' : table.is_public,
+        'can_read' : ', '.join([i.username for i in table.get_privileged_users("RA")]),
+        'can_write' : ', '.join([i.username for i in table.get_privileged_users("WA")]),
+        'cannot_write' : ', '.join([i.username for i in table.get_privileged_users("WB")]),
+        'cannot_read' : ', '.join([i.username for i in table.get_privileged_users("RB")])
+    })
+
+    return direct_to_template(request, "esus/table_access.html", {
+        "category" : category,
+        "table" : table,
+        "form" : form,
         'access' : access_manager,
     })

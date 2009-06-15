@@ -142,3 +142,17 @@ class EsusAccessManager(AccessInterface):
 
         return False
         
+    @check_required_context
+    def has_table_access_modify(self, user, table):
+        """
+        Can user modify access rights to table?
+
+        Yes, if:
+            * he is table owner
+        """
+
+        if user == table.owner:
+            return True
+        else:
+            return False
+

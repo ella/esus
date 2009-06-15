@@ -5,6 +5,14 @@ from django.utils.translation import ugettext_lazy as _
 
 #from esus.phorum.access import *
 
+ACCESS_TYPES = (
+    ('RA', 'Can read'),
+    ('WA', 'Can write'),
+    ('RB', 'Cannot read'),
+    ('WB', 'Cannot write'),
+    ('CA', 'Co-admin'),
+)
+
 class Category(models.Model):
     """
     Category represents "a group of Tables". They can be nested inside each other.
@@ -67,6 +75,18 @@ class Table(models.Model):
             table = self,
             **kwargs
         )
+    def get_privileged_users(self, access_type):
+#        return User.tableaccess_set.filter(
+#            table = self,
+#            access_type = access_type
+#        ).order_by('name')
+        acc = TableAccess.objects.filter(table__exact=self, access_type__exact=access_type).all().select_related()
+        return [a.user for a in acc]
+
+class TableAccess(models.Model):
+    table = models.ForeignKey(Table)
+    user = models.ForeignKey(User)
+    access_type = models.CharField(max_length=2, choices=ACCESS_TYPES)
 
 class Comment(models.Model):
     """

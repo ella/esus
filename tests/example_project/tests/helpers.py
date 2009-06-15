@@ -47,15 +47,20 @@ class EsusTestCase(SeleniumTestCase):
         self.selenium.window_maximize()
         self.login_user()
 
-    def login_user(self):
+    def login_user(self, username=None, password=None):
+        username = username or self.USER_USERNAME
+        password = password or self.USER_PASSWORD
+        
         self.selenium.open(self.TEST_PROJECT_URI)
         self.selenium.click(self.elements['navigation']['login'])
         self.selenium.wait_for_page_to_load(30000)
-        self.selenium.type("id_username", self.USER_USERNAME)
-        self.selenium.type("id_password", self.USER_PASSWORD)
+        self.selenium.type("id_username", username)
+        self.selenium.type("id_password", password)
         self.selenium.click(self.elements['pages']['login']['submit'])
         self.selenium.wait_for_page_to_load(30000)
-        self.assert_equals(self.USER_USERNAME, self.selenium.get_text(self.elements['pages']['profile']['username']))
+        self.assert_equals(username, self.selenium.get_text(self.elements['pages']['profile']['username']))
+
+    #def login_user(username=self.SUPERUSER_USERNAME, password=self.SUPERUSER_PASSWORD)
 
     def logout(self):
         self.selenium.click(self.elements['navigation']['logout'])

@@ -1,0 +1,14 @@
+{% extends "main.html" %}
+
+{% block primary_col %}
+    <h1>{{ table.name }} - Nastavení práv</h1>
+    {% ifequal table.owner user %}
+    <ul id="table-navigation">
+        <li><a href="{% url esus-phorum-table table=table.slug category=category.slug %}">Zpět ke stolu</a></li>
+    </ul>
+    {% endifequal %}
+    <form name="control" method="post">
+    {{ form.as_ul }}
+    <input type="submit" value="Uložit" />
+    </form>
+{% endblock %}

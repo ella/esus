@@ -65,5 +65,13 @@ def create_tables(case, commit=True):
         description = u"About disciples of Confucius",
     )
 
+    case.table_disciples = Table.objects.create(
+        owner = User.objects.get(username="superuser"),
+        name = u"Administration",
+        slug = u"administration",
+        category = case.category_sex,
+        description = u"Discussion with administrators",
+    )
+
     if commit:
         case.transaction.commit()

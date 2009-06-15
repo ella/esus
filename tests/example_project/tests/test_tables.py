@@ -81,3 +81,4 @@ This is ""Czechtile"" text.
 
         # comment should not be present
         self.assert_equals(articles_count-1, int(s.get_xpath_count("//div[@id='comments']/div[@class='comment']")))
+
