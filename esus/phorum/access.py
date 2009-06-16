@@ -24,7 +24,7 @@ def check_required_context(fn):
     """
     def _innerWrapper(self, *args, **kwargs):
         # get arguments, strip self out
-        args = getargspec(fn).args[1:]
+        args = getargspec(fn)[0][1:]
 
         new_kwargs = {}
         for arg in args:
