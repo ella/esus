@@ -1,4 +1,5 @@
 from django.http import HttpResponseForbidden
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -8,10 +9,11 @@ from django.views.generic.simple import direct_to_template
 from django.forms.formsets import formset_factory
 #from django.utils.translation import ugettext_lazy as _
 
-from esus.phorum.models import Category, Table, Comment
+from esus.phorum.models import Category, Table, Comment, TableAccess, TableAccessManager
 from esus.phorum.forms import (TableCreationForm,
     CommentCreationForm, CommentControlForm,
-    TableAccessForm,
+    TableAccessForm, PublicTableAccessForm,
+    NewUserForm
 )
 from esus.phorum.access import AccessManager
 
@@ -139,17 +141,74 @@ def table_settings_access(request, category, table):
     if not access_manager.has_table_access_modify():
         return HttpResponseForbidden()
 
-    form = TableAccessForm({
+    new_user_form = None
+    users_form = None
+
+    if request.method == "POST":
+        # found a better way to dispatch, as for table
+        if request.POST.has_key(u"new_user_form"):
+            new_user_form = NewUserForm(request.POST)
+            if new_user_form.is_valid():
+                #FIXME
+                user = User.objects.get(username=new_user_form.cleaned_data['username'])
+                if len(TableAccess.objects.filter(table=table, user=user)) == 0:
+
+                    table.add_user_access(
+                        user = user,
+                    )
+                    new_user_form = None
+        elif request.POST.has_key(u"users_form"):
+            users_form = formset_factory(TableAccessForm, can_delete=True, extra=0)(request.POST)
+            if users_form.is_valid():
+                try:
+                    for access_form in users_form.deleted_forms:
+                        TableAccess.objects.get(
+                            user = User.objects.get(username=access_form.cleaned_data['username']),
+                            table = table
+                        ).delete()
+                    for access_form in users_form.forms:
+                        access = TableAccess.objects.get(
+                            user = User.objects.get(username=access_form.cleaned_data['username']),
+                            table = table
+                        )
+                        access.access_type = TableAccessManager.compute_named_access(
+                            access_form.get_access_names()
+                        )
+                        access.save()
+
+                except (TableAccess.DoesNotExist, User.DoesNotExist):
+                    raise ValueError(access_form.cleaned_data['username'])
+                users_form = None
+
+
+
+    public_form = PublicTableAccessForm({
         'is_public' : table.is_public,
-        'can_read' : ', '.join([i.username for i in table.get_privileged_users("RA")]),
-        'can_write' : ', '.join([i.username for i in table.get_privileged_users("WA")]),
-        'cannot_write' : ', '.join([i.username for i in table.get_privileged_users("WB")]),
-        'cannot_read' : ', '.join([i.username for i in table.get_privileged_users("RB")])
+        'can_read' : True,
+        'can_write' : True,
     })
+
+    users_form = formset_factory(TableAccessForm, can_delete=True, extra=0)(
+        initial = [
+            {
+                "username" : access.user.username,
+                "can_read" : access.can_read(),
+                "can_write" : access.can_write(),
+                "can_delete" : access.can_delete(),
+
+            }
+            for access in table.get_special_accesses()
+        ]
+    )
+
+    if not new_user_form:
+        new_user_form = NewUserForm()
 
     return direct_to_template(request, "esus/table_access.html", {
         "category" : category,
         "table" : table,
-        "form" : form,
+        "public_form" : public_form,
+        "users_form" : users_form,
+        "new_user_form" : new_user_form,
         'access' : access_manager,
     })

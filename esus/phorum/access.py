@@ -141,7 +141,23 @@ class EsusAccessManager(AccessInterface):
             return True
 
         return False
-        
+
+    @check_required_context
+    def has_comment_view_deleted(self, user, comment):
+        """
+        Can user view comments that were delete from this table?
+
+        User can delete comment, if:
+            * he is comment owner
+            * he is table owner
+        """
+        if not user.is_authenticated():
+            return False
+
+        table = self.context.get("table", None) or comment.table
+
+        return ((user == table.owner) or (user == comment.author)) is True
+
     @check_required_context
     def has_table_access_modify(self, user, table):
         """

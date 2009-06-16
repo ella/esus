@@ -7,8 +7,27 @@
         <li><a href="{% url esus-phorum-table table=table.slug category=category.slug %}">Zpět ke stolu</a></li>
     </ul>
     {% endifequal %}
-    <form name="control" method="post">
-    {{ form.as_ul }}
-    <input type="submit" value="Uložit" />
+    <form name="public" method="post">
+        {{ public_form.as_ul }}
+        <input type="submit" name="public_form" value="Uložit" />
+    </form>
+
+    {% if users_form and users_form.forms %}
+    <form name="users" method="post">
+        {{ users_form.management_form }}
+        <table>
+        {% for form in users_form.forms %}
+            {{ form.as_table }}
+        {% endfor %}
+        <tr>
+            <td colspan="4"><input type="submit" name="users_form" value="Uložit" /></td>
+        </tr>
+        </table>
+    </form>
+    {% endif %}
+
+    <form name="new_user" method="post">
+        {{ new_user_form.as_ul }}
+        <input type="submit" name="new_user_form" value="Pridat" />
     </form>
 {% endblock %}
