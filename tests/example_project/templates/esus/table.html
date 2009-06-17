@@ -1,10 +1,10 @@
 {% extends "main.html" %}
 
 {% block primary_col %}
-    <h1>{{ table.name }}</h1>
+    <h1 name="table-name">{{ table.name }}</h1>
     {% ifequal table.owner user %}
     <ul id="table-navigation">
-        <li><a href="{% url esus-phorum-table-settings-access table=table.slug category=category.slug %}">Nastavení práv</a></li>
+        <li><a href="{% url esus-phorum-table-settings-access table=table.slug category=category.slug %}" name="access">Nastavení práv</a></li>
     </ul>
     {% endifequal %}
     <form id="comment-add" method="post">

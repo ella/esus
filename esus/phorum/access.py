@@ -74,8 +74,9 @@ def check_required_context(fn):
     return _innerWrapper
 
 class TableAccessManager(object):
-    def __init__(self, rights):
+    def __init__(self, rights, table=None):
         self.rights = rights
+        self.table = table
 
     def can_delete(self):
         return self.rights & 4
@@ -221,8 +222,13 @@ class EsusAccessManager(AccessInterface):
             * he is table owner
         """
 
-        if user == table.owner:
-            return True
-        else:
-            return False
+        return user == table.owner
 
+    @check_required_context
+    def has_table_read(self, user, table):
+        """
+        Can user modify access rights to table?
+        """
+        #FIXME: Use table.access_rights once available
+        manager = TableAccessManager(table.get_rights_for_user(user))
+        return manager.can_read()

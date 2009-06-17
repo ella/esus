@@ -1,3 +1,4 @@
+from django.template import loader, RequestContext
 from django.http import HttpResponseForbidden
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -78,6 +79,15 @@ def table(request, category, table):
 
     comment_forms = None
     form = None
+
+    if not access_manager.has_table_read():
+        c = RequestContext(request, {
+            "message" : "You have not enough privileges to read this table."
+        })
+        t = loader.get_template("esus/forbidden.html")
+        return HttpResponseForbidden(t.render(c))
+        #return HttpResponseForbidden(_("You have not enough privileges to read this table."))
+
 
     if request.method == "POST":
         # TODO: Abstract this logic into something more sensible, some kind of

@@ -28,6 +28,8 @@ class TestAccessHandling(DatabaseTestCase):
             "user" : self.user_super,
         })
         self.assert_true(self.manager.has_comment_create())
+        self.assert_true(self.manager.has_comment_delete())
+        self.assert_true(self.manager.has_table_view())
 
 
 class TestTableAccessManager(UnitTestCase):

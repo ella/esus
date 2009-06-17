@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 from django.utils.translation import ugettext_lazy as _
 
-from esus.phorum.access import ACCESS_TYPES, TableAccessManager
+from esus.phorum.access import TableAccessManager
 
 
 class Category(models.Model):
@@ -79,6 +79,14 @@ class Table(models.Model):
 #            access_type = access_type
 #        ).order_by('name')
         return TableAccess.objects.filter(table__exact=self).all().select_related()
+
+    def get_rights_for_user(self, user):
+        try:
+            return TableAccess.objects.get(table=self, user=user).access_type
+        except TableAccess.DoesNotExist:
+            return TableAccessManager.get_default_access()
+
+
 
 class TableAccess(models.Model):
     table = models.ForeignKey(Table)

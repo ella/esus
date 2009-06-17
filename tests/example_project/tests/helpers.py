@@ -37,7 +37,18 @@ class EsusTestCase(SeleniumTestCase):
                     'username' : "//h1",
                 },
                 'table' : {
-                    'name' : "//h1",
+                    'name' : "//h1[@name='table-name']",
+                    'access' : "//ul[@id='table-navigation']//a[@name='access']",
+                },
+                'table_access' : {
+                    'name' : "//h1[@name='table-name']",
+                    'submit_new_user' : "//input[@name='new_user_form']",
+                    'users_list' : {
+                        'access_read' : 'id_form-%(position)s-can_read',
+                        'access_write' : 'id_form-%(position)s-can_write',
+                        'access_delete' : 'id_form-%(position)s-can_delete',
+                    },
+                    'submit_users' : "//input[@name='users_form']",
                 },
             }
         }
@@ -60,7 +71,8 @@ class EsusTestCase(SeleniumTestCase):
         self.selenium.wait_for_page_to_load(30000)
         self.assert_equals(username, self.selenium.get_text(self.elements['pages']['profile']['username']))
 
-    #def login_user(username=self.SUPERUSER_USERNAME, password=self.SUPERUSER_PASSWORD)
+    def login_superuser(self):
+        return self.login_user(username=self.SUPERUSER_USERNAME, password=self.SUPERUSER_PASSWORD)
 
     def logout(self):
         self.selenium.click(self.elements['navigation']['logout'])
