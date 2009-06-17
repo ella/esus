@@ -25,6 +25,10 @@ ACCESS_TYPES = tuple([
     (ACCESS_DICT[right]['code'], ACCESS_DICT[right]["name"]) for right in ACCESS_DICT
 ])
 
+FULL_ACCESS_CODE = sum([
+            ACCESS_DICT[val]['code'] for val in ACCESS_DICT
+])
+
 
 
 class InsufficientContextError(Exception):
