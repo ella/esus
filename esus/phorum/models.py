@@ -3,27 +3,7 @@ from django.contrib.auth.models import User
 
 from django.utils.translation import ugettext_lazy as _
 
-#from esus.phorum.access import *
-
-# Define magic TableAccess constants
-ACCESS_DICT = {
-    "read" : {
-        "code" : 1,
-        "name" : _("Read"),
-    },
-    "write" : {
-        "code" : 2,
-        "name" : _("Write"),
-    },
-    "delete" : {
-        "code" : 4,
-        "name" : _("Delete"),
-    }
-}
-
-ACCESS_TYPES = tuple([
-    (ACCESS_DICT[right]['code'], ACCESS_DICT[right]["name"]) for right in ACCESS_DICT
-])
+from esus.phorum.access import ACCESS_TYPES, TableAccessManager
 
 
 class Category(models.Model):
@@ -54,32 +34,6 @@ class Category(models.Model):
             category = self,
             **kwargs
         )
-
-class TableAccessManager(object):
-    def __init__(self, rights):
-        self.rights = rights
-
-    def can_delete(self):
-        return self.rights & 4
-
-    def can_read(self):
-        return self.rights & 1
-
-    def can_write(self):
-        return self.rights & 2
-
-    @classmethod
-    def compute_named_access(cls, names):
-        return sum([
-            ACCESS_DICT[val]['code'] for val in names
-        ])
-
-    @classmethod
-    def get_default_access(cls):
-        return cls.compute_named_access([
-            "read",
-            "write",
-        ])
 
 class Table(models.Model):
     """
