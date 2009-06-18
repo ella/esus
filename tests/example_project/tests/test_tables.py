@@ -50,7 +50,7 @@ This is ""Czechtile"" text.
         s.click(u"//input[@type='submit']")
         s.wait_for_page_to_load(30000)
 
-        self.assert_equals("Important", s.get_text("//div[@id='comments']/div[@class='comment']/h1"))
+        self.assert_equals("Important", s.get_text("//div[@id='comments']/div[@class='comment']//h1[position()=1]"))
 
 
     def test_article_deleting(self):
