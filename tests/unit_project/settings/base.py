@@ -45,7 +45,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
 
     'south',
-    'threadedcomments',
     'djangomarkup',
     
     'esus.phorum',
