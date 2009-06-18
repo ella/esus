@@ -171,6 +171,8 @@ class EsusAccessManager(AccessInterface):
         """
         if not user.is_authenticated():
             return False
+        if user.is_superuser:
+            return True
 
         category = self.context.get("category", None) or table.category
 
@@ -189,13 +191,12 @@ class EsusAccessManager(AccessInterface):
         """
         if not user.is_authenticated():
             return False
+        if user.is_superuser:
+            return True
 
         table = self.context.get("table", None) or comment.table
 
-        if user == table.owner:
-            return True
-
-        return False
+        return (user == table.owner)
 
     @check_required_context
     def has_comment_view_deleted(self, user, comment):
@@ -208,6 +209,8 @@ class EsusAccessManager(AccessInterface):
         """
         if not user.is_authenticated():
             return False
+        if user.is_superuser:
+            return True
 
         table = self.context.get("table", None) or comment.table
 
@@ -221,6 +224,8 @@ class EsusAccessManager(AccessInterface):
         Yes, if:
             * he is table owner
         """
+        if user.is_superuser:
+            return True
 
         return user == table.owner
 
@@ -229,6 +234,9 @@ class EsusAccessManager(AccessInterface):
         """
         Can user modify access rights to table?
         """
+        if user.is_superuser:
+            return True
+
         #FIXME: Use table.access_rights once available
         manager = TableAccessManager(table.get_rights_for_user(user))
         return manager.can_read()

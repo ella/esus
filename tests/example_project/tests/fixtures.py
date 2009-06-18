@@ -65,7 +65,7 @@ def create_tables(case, commit=True):
         description = u"About disciples of Confucius",
     )
 
-    case.table_disciples = Table.objects.create(
+    case.table_admin = Table.objects.create(
         owner = User.objects.get(username="superuser"),
         name = u"Administration",
         slug = u"administration",

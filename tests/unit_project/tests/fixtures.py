@@ -67,3 +67,4 @@ def comment_simple(case, table=None, author=None):
         author = table.owner,
         text = u"Table 0wn3rz comment"
     )
+

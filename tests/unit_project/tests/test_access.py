@@ -6,7 +6,7 @@ from esus.phorum.access import (
     TableAccessManager, FULL_ACCESS_CODE
 )
 
-from unit_project.tests.fixtures import users_usual, user_super, table_simple
+from unit_project.tests.fixtures import users_usual, user_super, table_simple, comment_simple
 
 
 class TestAccessHandling(DatabaseTestCase):
@@ -15,6 +15,7 @@ class TestAccessHandling(DatabaseTestCase):
         users_usual(self)
         user_super(self)
         table_simple(self)
+        comment_simple(self)
 
         super(TestAccessHandling, self).setUp()
 
@@ -28,8 +29,8 @@ class TestAccessHandling(DatabaseTestCase):
             "user" : self.user_super,
         })
         self.assert_true(self.manager.has_comment_create())
-        self.assert_true(self.manager.has_comment_delete())
-        self.assert_true(self.manager.has_table_view())
+        self.assert_true(self.manager.has_comment_delete(comment=self.comment_doe))
+        self.assert_true(self.manager.has_table_read())
 
 
 class TestTableAccessManager(UnitTestCase):
